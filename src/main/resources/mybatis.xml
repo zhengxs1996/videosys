@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<configuration>
+
+    <settings>
+        <!-- spring和mybatis整合后，需要指定使用的日志类 -->
+        <setting name="logImpl" value="log4j"/>
+        <!-- 将数据库中含下划线的字段名改成驼峰命名法 -->
+        <setting name="mapUnderscoreToCamelCase" value="true" />
+    </settings>
+
+    <!-- 设置别名 -->
+    <typeAliases>
+        <typeAlias type="com.qfedu.entity.Admin" alias="Admin"/>
+        <typeAlias type="com.qfedu.vo.MenuList" alias="MenuList"/>
+        <typeAlias type="com.qfedu.entity.Cmenu" alias="Cmenu"/>
+        <typeAlias type="com.qfedu.entity.Video" alias="Video"/>
+        <typeAlias type="com.qfedu.vo.VideoList" alias="VideoList"/>
+        <typeAlias type="com.qfedu.entity.Speaker" alias="Speaker"/>
+        <typeAlias type="com.qfedu.entity.Course" alias="Course"/>
+        <typeAlias type="com.qfedu.entity.Subject" alias="Subject"/>
+        <typeAlias type="com.qfedu.entity.User" alias="User"/>
+        <typeAlias type="com.qfedu.vo.SubjectCourse" alias="SubjectCourse"/>
+        <typeAlias type="com.qfedu.vo.CourseVideo" alias="CourseVideo"/>
+        <typeAlias type="com.qfedu.vo.SectionVideo" alias="SectionVideo"/>
+        <typeAlias type="com.qfedu.vo.SectionCourse" alias="SectionCourse"/>
+
+    </typeAliases>
+
+    <plugins>
+        <!-- com.github.pagehelper为PageHelper类所在包名 -->
+        <plugin interceptor="com.github.pagehelper.PageInterceptor">
+            <!-- 使用下面的方式配置参数，后面会有所有的参数介绍 -->
+            <property name="helperDialect" value="mysql"/>
+        </plugin>
+    </plugins>
+
+
+</configuration>

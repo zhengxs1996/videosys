@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.qfedu.dao.VideoDao">
+    <resultMap id="VideoListMap" type="VideoList">
+        <result column="id" property="id"/>
+        <result column="title" property="title"/>
+        <result column="detail" property="detail"/>
+        <result column="speaker_name" property="speaker_name"/>
+        <result column="time" property="time"/>
+        <result column="play_num" property="play_num"/>
+    </resultMap>
+    
+    <select id="videoList" resultMap="VideoListMap">
+        select v.*,s.speaker_name from video v inner join speaker s on v.spearker_id = s.id
+        <where>
+            <if test="keyWord != null and keyWord != ''">
+                AND v.title like concat(concat("%",#{param1}),"%")
+            </if>
+            <if test="speakerId != null">
+                AND v.spearker_id = #{param2}
+            </if>
+            <if test="courseId != null">
+                AND v.course_id = #{param3}
+            </if>
+        </where>
+    </select>
+
+    <select id="videoSum" resultType="int">
+        select count(1) from video v inner join speaker s on v.spearker_id = s.id
+        <where>
+            <if test="keyWord != null and keyWord != ''">
+                AND v.title like concat(concat("%",#{param1}),"%")
+            </if>
+        </where>
+    </select>
+
+    <insert id="add" parameterType="Video">
+        insert into videosys.video (title, detail, time, spearker_id, course_id, video_url, image_url, play_num)
+        values (#{title},#{detail},#{time},#{spearkerId},#{courseId},#{videoUrl},#{imageUrl},#{playNum});
+    </insert>
+
+    <delete id="delete" parameterType="Integer">
+        delete from videosys.video where id = #{id};
+    </delete>
+
+    <select id="findById" parameterType="Integer" resultType="Video">
+        select * from videosys.video where id = #{id};
+    </select>
+    
+    <update id="update" parameterType="Video">
+        update videosys . video
+        set title       = #{title},
+            detail      = #{detail},
+            time        = #{time},
+            spearker_id = #{spearkerId},
+            course_id   = #{courseId},
+            video_url   = #{videoUrl},
+            image_url   = #{imageUrl},
+            play_num    = #{playNum}
+        where id = #{id};
+    </update>
+
+    <delete id="deleteAll" parameterType="map">
+        delete from videosys.video where id in
+                <foreach collection="array" item="id" open="(" close=")" separator=",">
+                    #{id}
+                </foreach>
+    </delete>
+</mapper>

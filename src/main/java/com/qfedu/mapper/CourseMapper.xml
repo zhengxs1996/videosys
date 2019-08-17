@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.qfedu.dao.CourseDao">
+    <select id="findAllCourse" resultType="Course">
+        select * from videosys.course;
+    </select>
+
+    <select id="findCourseSum" resultType="Integer">
+        select count(1) from videosys.course;
+    </select>
+
+    <insert id="add" parameterType="Course">
+        insert into videosys.course (course_title, course_desc, subject_id)
+        values (#{courseTitle},#{courseDesc},#{subjectId});
+    </insert>
+
+    <select id="findById" parameterType="Integer" resultType="Course">
+        select * from videosys.course where id = #{id};
+    </select>
+
+    <update id="update" parameterType="Course">
+        update videosys . course
+        set course_title = #{courseTitle},
+            course_desc  = #{courseDesc},
+            subject_id   = #{subjectId}
+        where id = #{id};
+    </update>
+
+    <delete id="delete" parameterType="Integer">
+        delete from videosys.course where id = #{id};
+    </delete>
+</mapper>

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.qfedu.dao.SubjectDao">
+
+    <resultMap id="SubjectCourseList" type="SubjectCourse">
+        <result column="subjectId" property="subjectId"/>
+        <result column="subject_name" property="subjectName"/>
+        <collection property="courseList" javaType="list" ofType="CourseVideo">
+            <result column="course_title" property="courseTitle"/>
+            <result column="course_desc" property="courseDesc"/>
+            <collection property="videoList" javaType="list" ofType="Video">
+                <result column="id" property="id"/>
+                <result column="title" property="title"/>
+                <result column="detail" property="detail"/>
+                <result column="time" property="time"/>
+                <result column="spearker_id" property="spearkerId"/>
+                <result column="course_id" property="courseId"/>
+                <result column="video_url" property="videoUrl"/>
+                <result column="image_url" property="imageUrl"/>
+                <result column="play_num" property="playNum"/>
+            </collection>
+        </collection>
+    </resultMap>
+    
+    <resultMap id="video" type="SectionVideo">
+        <result column="id" property="id"/>
+        <result column="play_num" property="playNum"/>
+        <result column="video_url" property="videoUrl"/>
+        <result column="image_url" property="imageUrl"/>
+        <result column="title" property="title"/>
+        <result column="detail" property="detail"/>
+        <association property="speaker" javaType="Speaker" >
+            <result column="sid" property="id"/>
+            <result column="speaker_name" property="speakerName"/>
+            <result column="head_img_url" property="headImgUrl"/>
+            <result column="speaker_desc" property="speakerDesc"/>
+        </association>
+    </resultMap>
+
+    <resultMap id="course" type="SectionCourse">
+        <result column="course_desc" property="courseDesc"/>
+        <collection property="videoList" javaType="list" ofType="VideoList">
+            <result column="id" property="id"/>
+            <result column="title" property="title"/>
+            <result column="detail" property="detail"/>
+            <result column="time" property="time"/>
+            <result column="speaker_name" property="speaker_name"/>
+            <result column="play_num" property="play_num"/>
+        </collection>
+    </resultMap>
+
+    <select id="findAll" resultType="Subject">
+        select * from videosys.subject;
+    </select>
+    
+    <select id="findSubjectCourseList" parameterType="Integer" resultMap="SubjectCourseList">
+        select s.id subjectId,s.subject_name,c.course_title,c.course_desc,v.*
+        from (subject s inner join course c on s.id = c.subject_id)
+                 inner join video v on c.id = v.course_id where s.id = #{subjectId};
+    </select>
+
+    <select id="findVideo" parameterType="Integer" resultMap="video">
+        select v.*,s.id sid,s.speaker_name,s.head_img_url,s.speaker_desc from videosys.video v inner join videosys.speaker s on v.spearker_id = s.id where v.id = #{videoId};
+    </select>
+
+    <select id="findCourse" parameterType="Integer" resultMap="course">
+        select v.*,c.course_desc,s.speaker_name from (video v inner join speaker s on s.id = v.spearker_id) inner join course c on v.course_id = c.id where v.course_id = (select course_id from video where id = #{videoId});
+    </select>
+</mapper>
